@@ -1,6 +1,15 @@
 Calf Studio gear
 ================
 
+### :warning: **WARNING** :warning: 
+
+* This is an active fork for keeping Calf alive as an LADSPA (v1) fork, predominatly for LMMS.
+* This source repository is a `git submodule` for use with [LMMS](https://github.com/lmms).  It will not build properly on its own.
+   * For details how to build, see [lmms/plugins/LadspaEffect/calf](https://github.com/LMMS/lmms/tree/master/plugins/LadspaEffect/calf).
+* Note: LMMS 1.3.0 and higher build this library as `veal.so`, not `calf.so`.
+
+---
+
 Calf Studio Gear is an audio plug-in pack for LV2 and JACK environments
 under LINUX operating systems. The suite contains lots of effects
 (delay, modulation, signal processing, filters, equalizers, dynamics,
