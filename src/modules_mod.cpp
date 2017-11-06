@@ -49,7 +49,7 @@ void flanger_audio_module::deactivate() {
     is_active = false;
 }
 
-bool flanger_audio_module::get_graph(int index, int subindex, float *data, int points, cairo_iface *context, int *mode) const
+bool flanger_audio_module::get_graph(int index, int subindex, float *data, int points, cairo_iface *context) const
 {
     if (!is_active)
         return false;
@@ -134,7 +134,7 @@ void phaser_audio_module::deactivate()
     is_active = false;
 }
 
-bool phaser_audio_module::get_graph(int index, int subindex, float *data, int points, cairo_iface *context, int *mode) const
+bool phaser_audio_module::get_graph(int index, int subindex, float *data, int points, cairo_iface *context) const
 {
     if (!is_active)
         return false;
@@ -421,12 +421,11 @@ void multichorus_audio_module::deactivate()
 
 void multichorus_audio_module::set_sample_rate(uint32_t sr) {
     srate = sr;
-    last_r_phase = -1;
     left.setup(sr);
     right.setup(sr);
 }
 
-bool multichorus_audio_module::get_graph(int index, int subindex, float *data, int points, cairo_iface *context, int *mode) const
+bool multichorus_audio_module::get_graph(int index, int subindex, float *data, int points, cairo_iface *context) const
 {
     if (!is_active)
         return false;
@@ -707,18 +706,18 @@ uint32_t pulsator_audio_module::process(uint32_t offset, uint32_t numsamples, ui
     return outputs_mask;
 }
 
-bool pulsator_audio_module::get_graph(int index, int subindex, float *data, int points, cairo_iface *context, int *mode) const
+bool pulsator_audio_module::get_graph(int index, int subindex, float *data, int points, cairo_iface *context) const
 {
     if (!is_active) {
         return false;
     } else if(index == param_freq) {
         if(subindex == 0) {
             context->set_source_rgba(0.35, 0.4, 0.2, 1);
-            return lfoL.get_graph(data, points, context, mode);
+            return lfoL.get_graph(data, points, context);
         }
         if(subindex == 1) {
             context->set_source_rgba(0.35, 0.4, 0.2, 0.5);
-            return lfoR.get_graph(data, points, context, mode);
+            return lfoR.get_graph(data, points, context);
         }
     }
     return false;

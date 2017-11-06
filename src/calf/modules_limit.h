@@ -60,13 +60,13 @@ private:
     typedef multibandlimiter_audio_module AM;
     static const int strips = 4;
     uint32_t clip_inL, clip_inR, clip_outL, clip_outR, asc_led;
-    int _mode, mode_old;
+    int mode, mode_old;
     bool solo[strips];
     bool no_solo;
     float meter_inL, meter_inR, meter_outL, meter_outR;
     dsp::lookahead_limiter strip[strips];
     dsp::lookahead_limiter broadband;
-    dsp::biquad_d2<float> lpL[strips - 1][strips - 1], lpR[strips - 1][strips - 1], hpL[strips - 1][strips - 1], hpR[strips - 1][strips - 1];
+    dsp::biquad_d2<float> lpL[strips - 1][3], lpR[strips - 1][3], hpL[strips - 1][3], hpR[strips - 1][3];
     float freq_old[strips - 1], sep_old[strips - 1], q_old[strips - 1];
     unsigned int pos;
     unsigned int buffer_size;
@@ -84,12 +84,13 @@ public:
     uint32_t srate;
     bool is_active;
     multibandlimiter_audio_module();
+	~multibandlimiter_audio_module();
     void activate();
     void deactivate();
     void params_changed();
     uint32_t process(uint32_t offset, uint32_t numsamples, uint32_t inputs_mask, uint32_t outputs_mask);
     void set_sample_rate(uint32_t sr);
-    bool get_graph(int index, int subindex, float *data, int points, cairo_iface *context, int *mode) const;
+    bool get_graph(int index, int subindex, float *data, int points, cairo_iface *context) const;
     bool get_gridline(int index, int subindex, float &pos, bool &vertical, std::string &legend, cairo_iface *context) const;
 };
 

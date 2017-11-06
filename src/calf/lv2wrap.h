@@ -96,8 +96,7 @@ struct lv2_instance: public plugin_ctl_iface, public progress_report_iface
         assert(string_type);
         for (unsigned int i = 0; vars[i]; i++)
         {
-            std::string    pred  = std::string("urn:calf:") + vars[i];
-            const uint32_t key   = uri_map->uri_to_id(uri_map->callback_data, NULL, pred.c_str());
+            const uint32_t key   = uri_map->uri_to_id(uri_map->callback_data, NULL, vars[i]);
             size_t         len   = 0;
             uint32_t       type  = 0;
             uint32_t       flags = 0;
@@ -170,7 +169,6 @@ struct lv2_instance: public plugin_ctl_iface, public progress_report_iface
     }
     virtual const plugin_metadata_iface *get_metadata_iface() const { return metadata; }
     virtual const line_graph_iface *get_line_graph_iface() const { return module->get_line_graph_iface(); }
-    virtual const phase_graph_iface *get_phase_graph_iface() const { return module->get_phase_graph_iface(); }
     virtual int send_status_updates(send_updates_iface *sui, int last_serial) { return module->send_status_updates(sui, last_serial); }
 };
 
@@ -296,13 +294,13 @@ struct lv2_wrapper
     {
         if (!strcmp(URI, "http://foltman.com/ns/calf-plugin-instance"))
             return &calf_descriptor;
-        if (!strcmp(URI, LV2_STATE__interface))
+        if (!strcmp(URI, LV2_STATE_INTERFACE_URI))
             return &state_iface;
         return NULL;
     }
-    static LV2_State_Status cb_state_save(
-	    LV2_Handle Instance, LV2_State_Store_Function store, LV2_State_Handle handle,
-	    uint32_t flags, const LV2_Feature *const * features)
+    static void cb_state_save(LV2_Handle Instance,
+                          LV2_State_Store_Function store, LV2_State_Handle handle,
+                          uint32_t flags, const LV2_Feature *const * features)
     {
         instance *const inst = (instance *)Instance;
         struct store_state: public send_configure_iface
@@ -314,9 +312,8 @@ struct lv2_wrapper
             
             virtual void send_configure(const char *key, const char *value)
             {
-                std::string pred = std::string("urn:calf:") + key;
                 (*store)(callback_data,
-                         inst->uri_map->uri_to_id(inst->uri_map->callback_data, NULL, pred.c_str()),
+                         inst->uri_map->uri_to_id(inst->uri_map->callback_data, NULL, key),
                          value,
                          strlen(value) + 1,
                          string_data_type,
@@ -332,15 +329,13 @@ struct lv2_wrapper
         s.string_data_type = inst->uri_map->uri_to_id(inst->uri_map->callback_data, NULL, "http://lv2plug.in/ns/ext/atom#String");
 
         inst->send_configures(&s);
-        return LV2_STATE_SUCCESS;
     }
-    static LV2_State_Status cb_state_restore(
-	    LV2_Handle Instance, LV2_State_Retrieve_Function retrieve, LV2_State_Handle callback_data,
-	    uint32_t flags, const LV2_Feature *const * features)
+    static void cb_state_restore(LV2_Handle Instance,
+                                 LV2_State_Retrieve_Function retrieve, LV2_State_Handle callback_data,
+                                 uint32_t flags, const LV2_Feature *const * features)
     {
         instance *const inst = (instance *)Instance;
         inst->impl_restore(retrieve, callback_data);
-        return LV2_STATE_SUCCESS;
     }
     
     static lv2_wrapper &get() { 

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Lesser General
  * Public License along with this program; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
 #include <config.h>
@@ -33,7 +33,7 @@ string encode_map(const dictionary &data)
     osctl::string_buffer sb;
     osc_stream<osctl::string_buffer> str(sb);
     str << (uint32_t)data.size();
-    for(dictionary::const_iterator i = data.begin(); i != data.end(); i++)
+    for(dictionary::const_iterator i = data.begin(); i != data.end(); ++i)
     {
         str << i->first << i->second;
     }
@@ -78,16 +78,21 @@ std::string load_file(const std::string &src)
 {
     std::string str;
     FILE *f = fopen(src.c_str(), "rb");
+#if 0
     if (!f)
         throw file_exception(src);
+#endif
     while(!feof(f))
     {
         char buffer[1024];
-        int len = fread(buffer, 1, sizeof(buffer), f);
+        size_t len = fread(buffer, 1, sizeof(buffer), f);
+#if 0
         if (len < 0)
             throw file_exception(src);
+#endif
         str += string(buffer, len);
     }
+    fclose(f);
     return str;
 }
 
@@ -95,7 +100,7 @@ std::string i2s(int value)
 {
     char buf[32];
     sprintf(buf, "%d", value);
-    
+
     return std::string(buf);
 }
 
@@ -136,7 +141,7 @@ file_exception::file_exception(const std::string &f)
 : message(strerror(errno))
 , filename(f)
 , container(filename + ":" + message)
-{ 
+{
     text = container.c_str();
 }
 

@@ -244,13 +244,20 @@ multibandlimiter_audio_module::multibandlimiter_audio_module()
         q_old[i] = -1;
     }
     mode_old = 0;
-    _mode = 0;
     for(int i = 0; i < strips; i ++) {
         weight_old[i] = -1.f;
     }
     attack_old = -1.f;
     limit_old = -1.f;
     asc_old = true;
+}
+
+multibandlimiter_audio_module::~multibandlimiter_audio_module()
+{
+	if( buffer != NULL)
+	{
+		free(buffer);
+	}
 }
 
 void multibandlimiter_audio_module::activate()
@@ -290,11 +297,11 @@ void multibandlimiter_audio_module::params_changed()
             *params[param_solo2] > 0.f ||
             *params[param_solo3] > 0.f) ? false : true;
 
-    mode_old = _mode;
-    _mode = *params[param_mode];
+    mode_old = mode;
+    mode = *params[param_mode];
     int i;
     int j1;
-    switch(_mode) {
+    switch(mode) {
         case 0:
         default:
             j1 = 0;
@@ -355,12 +362,12 @@ void multibandlimiter_audio_module::params_changed()
     rel = *params[param_release] *  pow(0.25, *params[param_release0] * -1);
     rel = (*params[param_minrel] > 0.5) ? std::max(2500 * (1.f / 30), rel) : rel;
     weight[0] = pow(0.25, *params[param_weight0] * -1);
-    strip[0].set_params(*params[param_limit], *params[param_attack], rel, weight[0], *params[param_asc], pow(0.5, (*params[param_asc_coeff] - 0.5) * 2 * -1));
+    strip[0].set_params(*params[param_limit], *params[param_attack], rel, weight[0], *params[param_asc], pow(0.5, (*params[param_asc_coeff] - 0.5) * 2 * -1), true);
     *params[param_effrelease0] = rel;
     rel = *params[param_release] *  pow(0.25, *params[param_release1] * -1);
     rel = (*params[param_minrel] > 0.5) ? std::max(2500 * (1.f / *params[param_freq0]), rel) : rel;
     weight[1] = pow(0.25, *params[param_weight1] * -1);
-    strip[1].set_params(*params[param_limit], *params[param_attack], rel, weight[1], *params[param_asc], pow(0.5, (*params[param_asc_coeff] - 0.5) * 2 * -1), true);
+    strip[1].set_params(*params[param_limit], *params[param_attack], rel, weight[1], *params[param_asc], pow(0.5, (*params[param_asc_coeff] - 0.5) * 2 * -1));
     *params[param_effrelease1] = rel;
     rel = *params[param_release] *  pow(0.25, *params[param_release2] * -1);
     rel = (*params[param_minrel] > 0.5) ? std::max(2500 * (1.f / *params[param_freq1]), rel) : rel;
@@ -422,7 +429,6 @@ void multibandlimiter_audio_module::set_sample_rate(uint32_t sr)
     if(params[param_att##index] != NULL) \
         *params[param_att##index] = strip[index].get_attenuation(); \
 
-
 uint32_t multibandlimiter_audio_module::process(uint32_t offset, uint32_t numsamples, uint32_t inputs_mask, uint32_t outputs_mask)
 {
     bool bypass = *params[param_bypass] > 0.5f;
@@ -473,7 +479,7 @@ uint32_t multibandlimiter_audio_module::process(uint32_t offset, uint32_t numsam
             inL *= *params[param_level_in];
             // even out filters gain reduction
             // 3dB - levelled manually (based on default sep and q settings)
-            switch(_mode) {
+            switch(mode) {
                 case 0:
                     inL *= 1.414213562;
                     inR *= 1.414213562;
@@ -496,7 +502,7 @@ uint32_t multibandlimiter_audio_module::process(uint32_t offset, uint32_t numsam
                 left  = inL;
                 right = inR;
                 // send trough filters
-                switch(_mode) {
+                switch(mode) {
                     // how many filter passes? (12/36dB)
                     case 0:
                     default:
@@ -534,7 +540,8 @@ uint32_t multibandlimiter_audio_module::process(uint32_t offset, uint32_t numsam
             } // process single strip with filter
 
             // write multiband coefficient to buffer
-            buffer[pos] = std::min(*params[param_limit] / std::max(fabs(sum_left), fabs(sum_right)), 1.0);
+            float pre_buffer = *params[param_limit] / std::max(fabs(sum_left), fabs(sum_right));
+            buffer[pos] = std::min(pre_buffer, 1.0f);
 
             for (int i = 0; i < strips; i++) {
                 // process gain reduction
@@ -637,7 +644,7 @@ uint32_t multibandlimiter_audio_module::process(uint32_t offset, uint32_t numsam
     return outputs_mask;
 }
 
-bool multibandlimiter_audio_module::get_graph(int index, int subindex, float *data, int points, cairo_iface *context, int *mode) const
+bool multibandlimiter_audio_module::get_graph(int index, int subindex, float *data, int points, cairo_iface *context) const
 {
     if (!is_active or subindex > 3)
         return false;
@@ -648,7 +655,7 @@ bool multibandlimiter_audio_module::get_graph(int index, int subindex, float *da
     {
         ret = 1.f;
         freq = 20.0 * pow (20000.0 / 20.0, i * 1.0 / points);
-        switch(_mode) {
+        switch(mode) {
             case 0:
             default:
                 j1 = 0;
@@ -658,14 +665,22 @@ bool multibandlimiter_audio_module::get_graph(int index, int subindex, float *da
                 break;
         }
         for(int j = 0; j <= j1; j ++) {
-            if(subindex == 0)
-                ret *= lpL[0][j].freq_gain(freq, (float)srate);
-            if(subindex > 0 and subindex < strips - 1) {
-                ret *= hpL[subindex - 1][j].freq_gain(freq, (float)srate);
-                ret *= lpL[subindex][j].freq_gain(freq, (float)srate);
+            switch(subindex) {
+                case 0:
+                    ret *= lpL[0][j].freq_gain(freq, (float)srate);
+                    break;
+                case 1:
+                    ret *= hpL[0][j].freq_gain(freq, (float)srate);
+                    ret *= lpL[1][j].freq_gain(freq, (float)srate);
+                    break;
+                case 2:
+                    ret *= hpL[1][j].freq_gain(freq, (float)srate);
+                    ret *= lpL[2][j].freq_gain(freq, (float)srate);
+                    break;
+                case 3:
+                    ret *= hpL[2][j].freq_gain(freq, (float)srate);
+                    break;
             }
-            if(subindex == strips - 1)
-                ret *= hpL[2][j].freq_gain(freq, (float)srate);
         }
         data[i] = dB_grid(ret);
     }

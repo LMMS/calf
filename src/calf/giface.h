@@ -164,7 +164,7 @@ struct line_graph_iface
     /// @param context cairo context to adjust (for multicolour graphs etc.)
     /// @retval true graph data was returned; subindex+1 graph may or may not be available
     /// @retval false graph data was not returned; subindex+1 graph does not exist either
-    virtual bool get_graph(int index, int subindex, float *data, int points, cairo_iface *context, int *mode = 0) const { return false; }
+    virtual bool get_graph(int index, int subindex, float *data, int points, cairo_iface *context) const { return false; }
 
     /// Obtain subindex'th dot of parameter 'index'
     /// @param index parameter/dot number (usually tied to particular plugin control port)
@@ -196,19 +196,8 @@ struct line_graph_iface
     /// @retval Current generation (to pass when calling the function next time); if different than passed generation value, call the function again to retrieve which graph offsets should be put into cache
     virtual int get_changed_offsets(int index, int generation, int &subindex_graph, int &subindex_dot, int &subindex_gridline) const { subindex_graph = subindex_dot = subindex_gridline = 0; return 0; }
     
-    /// Return if a graph should redraw completely
-    /// @param index Parameter/graph number (usually tied to particular plugin control port)
-    virtual bool get_clear_all(int index) const { return false; }
-    
     /// Standard destructor to make compiler happy
     virtual ~line_graph_iface() {}
-};
-
-/// 'provides live line graph values' interface
-struct phase_graph_iface
-{
-    virtual bool get_phase_graph(float ** _buffer, int *_length, int * _mode, bool * _use_fade, float * _fade, int * _accuracy, bool * _display) const { return false; };
-    virtual ~phase_graph_iface() {}
 };
 
 enum table_column_type
@@ -366,8 +355,6 @@ struct plugin_ctl_iface
     virtual const plugin_metadata_iface *get_metadata_iface() const = 0;
     /// @return line_graph_iface if any
     virtual const line_graph_iface *get_line_graph_iface() const = 0;
-    /// @return phase_graph_iface if any
-    virtual const phase_graph_iface *get_phase_graph_iface() const = 0;
     /// Do-nothing destructor to silence compiler warning
     virtual ~plugin_ctl_iface() {}
 };
@@ -448,8 +435,6 @@ struct audio_module_iface
     virtual uint32_t message_run(const void *valid_ports, void *output_ports) = 0;
     /// @return line_graph_iface if any
     virtual const line_graph_iface *get_line_graph_iface() const = 0;
-     /// @return phase_graph_iface if any
-    virtual const phase_graph_iface *get_phase_graph_iface() const = 0;
     virtual ~audio_module_iface() {}
 };
 
@@ -552,8 +537,6 @@ public:
     }
     /// @return line_graph_iface if any
     virtual const line_graph_iface *get_line_graph_iface() const { return dynamic_cast<const line_graph_iface *>(this); }
-    /// @return phase_graph_iface if any
-    virtual const phase_graph_iface *get_phase_graph_iface() const { return dynamic_cast<const phase_graph_iface *>(this); }
 };
 
 #if USE_EXEC_GUI || USE_DSSI
@@ -583,9 +566,6 @@ struct dssi_feedback_sender
     std::vector<int> indices;
     /// Source for the graph data (interface to marshal)
     const calf_plugins::line_graph_iface *graph;
-    
-    /// Source for the graph data (interface to marshal)
-    const calf_plugins::phase_graph_iface *phase;
     
     /// Create using a new client
     dssi_feedback_sender(const char *URI, const line_graph_iface *_graph);
@@ -654,7 +634,6 @@ static bool get_graph(Fx &fx, int subindex, float *data, int points, float res =
 {
     for (int i = 0; i < points; i++)
     {
-        typedef std::complex<double> cfloat;
         double freq = 20.0 * pow (20000.0 / 20.0, i * 1.0 / points);
         data[i] = dB_grid(fx.freq_gain(subindex, freq, fx.srate), res, ofs);
     }

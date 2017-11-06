@@ -73,7 +73,7 @@ void organ_audio_module::params_changed() {
     update_params();
 }
 
-bool organ_audio_module::get_graph(int index, int subindex, float *data, int points, cairo_iface *context, int *mode) const
+bool organ_audio_module::get_graph(int index, int subindex, float *data, int points, cairo_iface *context) const
 {
     if (index == par_master) {
         organ_voice_base::precalculate_waves(progress_report);
@@ -983,7 +983,7 @@ bool drawbar_organ::check_percussion() {
 void drawbar_organ::pitch_bend(int amt)
 {
     parameters->pitch_bend = pow(2.0, (amt * parameters->pitch_bend_range) / (1200.0 * 8192.0));
-    for (list<voice *>::iterator i = active_voices.begin(); i != active_voices.end(); i++)
+    for (list<voice *>::iterator i = active_voices.begin(); i != active_voices.end(); ++i)
     {
         organ_voice *v = dynamic_cast<organ_voice *>(*i);
         v->update_pitch();

@@ -26,9 +26,8 @@
 #include <vector>
 #include <string.h>
 #include <errno.h>
-#include <netinet/in.h>
-#include <netdb.h>
 #include <iostream>
+#include <stdint.h>
 
 namespace osctl
 {
@@ -230,9 +229,11 @@ struct osc_stream
     {
         if (!buffer.read((uint8_t *)dest, bytes))
         {
+#if 0
             if (Throw)
                 throw osc_read_exception();
             else
+#endif
             {
                 error = true;
                 memset(dest, 0, bytes);
@@ -243,9 +244,11 @@ struct osc_stream
     {
         if (!buffer.write((const uint8_t *)src, bytes))
         {
+#if 0
             if (Throw)
                 throw osc_write_exception();
             else
+#endif
                 error = true;
         }
     }
@@ -290,9 +293,11 @@ template<class Buffer, class TypeBuffer>
 inline osc_stream<Buffer, TypeBuffer> &
 operator <<(osc_stream<Buffer, TypeBuffer> &s, uint32_t val)
 {
+#if 0
     val = htonl(val);
     s.write(&val, 4);
     s.write_type(osc_i32);
+#endif
     return s;
 }
 
@@ -300,8 +305,10 @@ template<class Buffer, class TypeBuffer>
 inline osc_stream<Buffer, TypeBuffer> &
 operator >>(osc_stream<Buffer, TypeBuffer> &s, uint32_t &val)
 {
+#if 0
     s.read(&val, 4);
     val = htonl(val);
+#endif
     return s;
 }
 
@@ -309,8 +316,10 @@ template<class Buffer, class TypeBuffer>
 inline osc_stream<Buffer, TypeBuffer> &
 operator >>(osc_stream<Buffer, TypeBuffer> &s, int32_t &val)
 {
+#if 0
     s.read(&val, 4);
     val = htonl(val);
+#endif
     return s;
 }
 
@@ -371,6 +380,7 @@ template<class Buffer, class TypeBuffer, class DestBuffer>
 inline osc_stream<Buffer, TypeBuffer> &
 read_buffer_from_osc_stream(osc_stream<Buffer, TypeBuffer> &s, DestBuffer &buf)
 {
+#if 0
     uint32_t nlen = 0;
     s.read(&nlen, 4);
     uint32_t len = htonl(nlen);
@@ -384,6 +394,7 @@ read_buffer_from_osc_stream(osc_stream<Buffer, TypeBuffer> &s, DestBuffer &buf)
     }
     // pad
     s.read(&nlen, 4 - (len & 3));
+#endif
     return s;
 }
 
@@ -391,6 +402,7 @@ template<class Buffer, class TypeBuffer, class SrcBuffer>
 inline osc_stream<Buffer, TypeBuffer> &
 write_buffer_to_osc_stream(osc_stream<Buffer, TypeBuffer> &s, SrcBuffer &buf)
 {
+#if 0
     uint32_t len = buf.read_left();
     uint32_t nlen = ntohl(len);
     s.write(&nlen, 4);
@@ -404,6 +416,7 @@ write_buffer_to_osc_stream(osc_stream<Buffer, TypeBuffer> &s, SrcBuffer &buf)
     }
     s.pad();
     s.write_type(osc_blob);
+#endif
     return s;
 }
 
@@ -465,6 +478,7 @@ struct osc_net_exception: public std::exception
     
 struct osc_net_dns_exception: public std::exception
 {
+#if 0
     int net_errno;
     std::string command, error_msg;
     osc_net_dns_exception(const char *cmd, int _errno = h_errno)
@@ -475,6 +489,7 @@ struct osc_net_dns_exception: public std::exception
     }
     virtual const char *what() const throw() { return error_msg.c_str(); }
     virtual ~osc_net_dns_exception() throw () {}
+#endif
 };
     
 template<class OscStream>

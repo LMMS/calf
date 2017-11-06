@@ -22,7 +22,6 @@
 #define CALF_MODULES_H
 
 #include <assert.h>
-#include <fftw3.h>
 #include <limits.h>
 #include "biquad.h"
 #include "inertia.h"
@@ -206,7 +205,7 @@ public:
         inertia_filter_module::params_changed(); 
     }
         
-    bool get_graph(int index, int subindex, float *data, int points, cairo_iface *context, int *mode) const;
+    bool get_graph(int index, int subindex, float *data, int points, cairo_iface *context) const;
     int get_changed_offsets(int index, int generation, int &subindex_graph, int &subindex_dot, int &subindex_gridline) const;
 };
 
@@ -236,7 +235,7 @@ public:
     virtual void note_on(int channel, int note, int vel);
     virtual void note_off(int channel, int note, int vel);
     
-    bool get_graph(int index, int subindex, float *data, int points, cairo_iface *context, int *mode) const;
+    bool get_graph(int index, int subindex, float *data, int points, cairo_iface *context) const;
     
 private:
     void adjust_gain_according_to_filter_mode(int velocity);
@@ -257,14 +256,14 @@ class mono_audio_module:
     float * buffer;
     unsigned int pos;
     unsigned int buffer_size;
-    float sign(float x) {
-        if(x < 0) return -1.f;
-        if(x > 0) return 1.f;
-        return 0.f;
+    
+    void softclip(float &s) {
+        int ph = s / fabs(s);
+        s = s > 0.63 ? ((0.63 + 0.36) * ph * (1 - pow(MATH_E, (1.f / 3) * (0.63 + s * ph)))) : s;
     }
-    float _phase, _phase_sin_coef, _phase_cos_coef, _sc_level, _inv_atan_shape;
 public:
     mono_audio_module();
+	~mono_audio_module();
     void params_changed();
     void activate();
     void set_sample_rate(uint32_t sr);
@@ -286,14 +285,14 @@ class stereo_audio_module:
     float * buffer;
     unsigned int pos;
     unsigned int buffer_size;
-    float sign(float x) {
-        if(x < 0) return -1.f;
-        if(x > 0) return 1.f;
-        return 0.f;
+    
+    void softclip(float &s) {
+        int ph = s / fabs(s);
+        s = s > 0.63 ? ((0.63 + 0.36) * ph * (1 - pow(MATH_E, (1.f / 3) * (0.63 + s * ph)))) : s;
     }
-    float _phase, _phase_sin_coef, _phase_cos_coef, _sc_level, _inv_atan_shape;
 public:
     stereo_audio_module();
+	~stereo_audio_module();
     void params_changed();
     void activate();
     void set_sample_rate(uint32_t sr);
@@ -301,60 +300,6 @@ public:
     uint32_t process(uint32_t offset, uint32_t numsamples, uint32_t inputs_mask, uint32_t outputs_mask);
 };
 
-class analyzer_audio_module:
-    public audio_module<analyzer_metadata>, public frequency_response_line_graph, public phase_graph_iface
-{
-    typedef analyzer_audio_module AM;
-    uint32_t srate;
-    bool active;
-    int _accuracy;
-    int _acc_old;
-    int _scale_old;
-    int _post_old;
-    int _hold_old;
-    int _smooth_old;
-    uint32_t clip_L, clip_R;
-    float meter_L, meter_R;
-    
-public:
-    analyzer_audio_module();
-    void params_changed();
-    void activate();
-    void set_sample_rate(uint32_t sr);
-    void deactivate();
-    uint32_t process(uint32_t offset, uint32_t numsamples, uint32_t inputs_mask, uint32_t outputs_mask);
-    bool get_phase_graph(float ** _buffer, int * _length, int * _mode, bool * _use_fade, float * _fade, int * _accuracy, bool * _display) const;
-    bool get_graph(int index, int subindex, float *data, int points, cairo_iface *context, int *mode) const;
-    bool get_gridline(int index, int subindex, float &pos, bool &vertical, std::string &legend, cairo_iface *context) const;
-    bool get_clear_all(int index) const;
-    ~analyzer_audio_module();
-    mutable int _mode_old;
-    mutable bool _falling;
-protected:
-    static const int max_phase_buffer_size = 8192;
-    int phase_buffer_size;
-    float *phase_buffer;
-    int fft_buffer_size;
-    float *fft_buffer;
-    int *spline_buffer;
-    int plength;
-    int ppos;
-    int fpos;
-    mutable fftwf_plan fft_plan;
-    static const int max_fft_cache_size = 32768;
-    static const int max_fft_buffer_size = max_fft_cache_size * 2;
-    float *fft_inL, *fft_outL;
-    float *fft_inR, *fft_outR;
-    float *fft_smoothL, *fft_smoothR;
-    float *fft_deltaL, *fft_deltaR;
-    float *fft_holdL, *fft_holdR;
-    float *fft_fallingL, *fft_fallingR;
-    float *fft_freezeL, *fft_freezeR;
-    mutable int lintrans;
-    mutable int ____analyzer_phase_was_drawn_here;
-    mutable int ____analyzer_sanitize;
-
-};
 
 };
 #endif

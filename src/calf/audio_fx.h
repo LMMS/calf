@@ -561,7 +561,7 @@ public:
     void activate();
     void deactivate();
     float get_value_from_phase(float ph, float off) const;
-    bool get_graph(float *data, int points, calf_plugins::cairo_iface *context, int *mode) const;
+    bool get_graph(float *data, int points, calf_plugins::cairo_iface *context) const;
     bool get_dot(float &x, float &y, int &size, calf_plugins::cairo_iface *context) const;
 };
 
@@ -600,16 +600,15 @@ public:
     int asc_pos;
     bool asc_changed;
     float asc_coeff;
-    bool _asc_used;
     static inline void denormal(volatile float *f) {
 	    *f += 1e-18;
 	    *f -= 1e-18;
     }
-    inline float get_rdelta(float peak, float _limit, float _att, bool _asc = true);
     void reset();
     void reset_asc();
     bool get_asc();
     lookahead_limiter();
+	~lookahead_limiter();
     void set_multi(bool set);
     void process(float &left, float &right, float *multi_buffer);
     void set_sample_rate(uint32_t sr);

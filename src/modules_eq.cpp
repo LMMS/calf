@@ -251,7 +251,7 @@ uint32_t equalizerNband_audio_module<BaseClass, has_lphp>::process(uint32_t offs
 }
 
 template<class BaseClass, bool has_lphp>
-bool equalizerNband_audio_module<BaseClass, has_lphp>::get_graph(int index, int subindex, float *data, int points, cairo_iface *context, int *mode) const
+bool equalizerNband_audio_module<BaseClass, has_lphp>::get_graph(int index, int subindex, float *data, int points, cairo_iface *context) const
 {
     if (!is_active)
         return false;
@@ -337,7 +337,7 @@ float equalizerNband_audio_module<BaseClass, use_hplp>::freq_gain(int index, dou
     return ret;
 }
 
-template class equalizerNband_audio_module<equalizer5band_metadata, false>;
-template class equalizerNband_audio_module<equalizer8band_metadata, true>;
-template class equalizerNband_audio_module<equalizer12band_metadata, true>;
+template class calf_plugins::equalizerNband_audio_module<equalizer5band_metadata, false>;
+template class calf_plugins::equalizerNband_audio_module<equalizer8band_metadata, true>;
+template class calf_plugins::equalizerNband_audio_module<equalizer12band_metadata, true>;
 

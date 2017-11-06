@@ -202,10 +202,12 @@ void calf_plugins::plugin_ctl_iface::clear_preset() {
 
 const char *calf_plugins::load_gui_xml(const std::string &plugin_id)
 {
+#if 0
     try {
         return strdup(calf_utils::load_file((std::string(PKGLIBDIR) + "/gui-" + plugin_id + ".xml").c_str()).c_str());
     }
     catch(file_exception e)
+#endif
     {
         return NULL;
     }
