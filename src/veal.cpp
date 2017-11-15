@@ -21,14 +21,15 @@
 #include <config.h>
 #include <calf/ladspa_wrap.h>
 #include <calf/lv2wrap.h>
-#include <calf/modules.h>
 #include <calf/modules_comp.h>
 #include <calf/modules_limit.h>
+#include <calf/modules_delay.h>
 #include <calf/modules_dev.h>
 #include <calf/modules_dist.h>
-#include <calf/modules_eq.h>
+#include <calf/modules_filter.h>
 #include <calf/modules_mod.h>
 #include <calf/modules_synths.h>
+#include <calf/modules_tools.h>
 #include <calf/organ.h>
 
 using namespace calf_plugins;
@@ -38,6 +39,7 @@ using namespace calf_plugins;
 #if USE_LADSPA
 
 ladspa_instance::ladspa_instance(audio_module_iface *_module, ladspa_plugin_metadata_set *_ladspa, int sample_rate)
+    : sample_rate(sample_rate)
 {
     module = _module;
     metadata = module->get_metadata_iface();
@@ -50,8 +52,10 @@ ladspa_instance::ladspa_instance(audio_module_iface *_module, ladspa_plugin_meta
     feedback_sender = NULL;
 #endif
 
-    module->set_sample_rate(sample_rate);
-    module->post_instantiate();
+    // CALF's set_sample_rate requires all ports to be connected already,
+    // so we'll delay setting the sample_rate until cb_activate
+
+    module->post_instantiate(sample_rate);
 }
 
 ladspa_instance::~ladspa_instance()
@@ -220,7 +224,12 @@ void ladspa_instance::process_dssi_event(snd_seq_event_t &event)
 /// LADSPA activate function (note that at this moment the ports are not set)
 static void cb_activate(LADSPA_Handle Instance)
 {
-    ((ladspa_instance *)(Instance))->activate_flag = true;
+    ladspa_instance* i = (ladspa_instance *)(Instance);
+
+    // CALF's set_sample_rate requires all ports to be connected already,
+    // so we've delayed this
+    i->module->set_sample_rate(i->sample_rate);
+    i->activate_flag = true;
 }
 
 /// LADSPA run function - does set sample rate / activate logic when it's run first time after activation
@@ -330,7 +339,9 @@ void ladspa_plugin_metadata_set::prepare(const plugin_metadata_iface *md, LADSPA
     metadata = md;
     
     input_count = md->get_input_count();
+    if(input_count > 2) input_count -= md->get_inputs_optional();
     output_count = md->get_output_count();
+    if(output_count > 2) output_count -= md->get_outputs_optional();
     param_count = md->get_param_count(); // XXXKF ladspa_instance<Module>::real_param_count();
     
     const ladspa_plugin_info &plugin_info = md->get_plugin_info();
@@ -344,14 +355,23 @@ void ladspa_plugin_metadata_set::prepare(const plugin_metadata_iface *md, LADSPA
     descriptor.PortNames = new char *[descriptor.PortCount];
     descriptor.PortDescriptors = new LADSPA_PortDescriptor[descriptor.PortCount];
     descriptor.PortRangeHints = new LADSPA_PortRangeHint[descriptor.PortCount];
+    //printf("%s: params: %d\n", descriptor.Name, param_count);
+    const char *in_names[] = { "In L", "In R", "Sidechain", "Sidechain 2" };
+    const char *out_names[] = { "Out L", "Out R", "Out L 2", "Out R 2", "Out L 3", "Out R 3", "Out L 4", "Out R 4" };
     int i;
-    for (i = 0; i < input_count + output_count; i++)
+    for (i = 0; i < input_count; i++)
     {
         LADSPA_PortRangeHint &prh = ((LADSPA_PortRangeHint *)descriptor.PortRangeHints)[i];
-        ((int *)descriptor.PortDescriptors)[i] = i < input_count ? LADSPA_PORT_INPUT | LADSPA_PORT_AUDIO
-                                              : LADSPA_PORT_OUTPUT | LADSPA_PORT_AUDIO;
+        ((int *)descriptor.PortDescriptors)[i] = LADSPA_PORT_INPUT | LADSPA_PORT_AUDIO;
         prh.HintDescriptor = 0;
-        ((const char **)descriptor.PortNames)[i] = md->get_port_names()[i];
+        ((const char **)descriptor.PortNames)[i] = in_names[i];
+    }
+    for (; i < input_count + output_count; i++)
+    {
+        LADSPA_PortRangeHint &prh = ((LADSPA_PortRangeHint *)descriptor.PortRangeHints)[i];
+        ((int *)descriptor.PortDescriptors)[i] = LADSPA_PORT_OUTPUT | LADSPA_PORT_AUDIO;
+        prh.HintDescriptor = 0;
+        ((const char **)descriptor.PortNames)[i] = out_names[i-input_count];
     }
     for (; i < input_count + output_count + param_count; i++)
     {
@@ -361,8 +381,11 @@ void ladspa_plugin_metadata_set::prepare(const plugin_metadata_iface *md, LADSPA
             LADSPA_PORT_CONTROL | (pp.flags & PF_PROP_OUTPUT ? LADSPA_PORT_OUTPUT : LADSPA_PORT_INPUT);
         prh.HintDescriptor = LADSPA_HINT_BOUNDED_ABOVE | LADSPA_HINT_BOUNDED_BELOW;
         ((const char **)descriptor.PortNames)[i] = pp.name;
+        //printf("%d => %s (%s)\n", i, descriptor.PortNames[i], pp.name);
         prh.LowerBound = pp.min;
         prh.UpperBound = pp.max;
+//      if(!strcmp(plugin_info.name, "Calf Rotary Speaker"))
+//      printf("def val: %s: %f\n", descriptor.PortNames[i], pp.def_value);
         switch(pp.flags & PF_TYPEMASK) {
             case PF_BOOL: 
                 prh.HintDescriptor |= LADSPA_HINT_TOGGLED;
@@ -370,7 +393,10 @@ void ladspa_plugin_metadata_set::prepare(const plugin_metadata_iface *md, LADSPA
                 break;
             case PF_INT: 
             case PF_ENUM: 
+                // lmms extension: integer + toggled => enum
                 prh.HintDescriptor |= LADSPA_HINT_INTEGER;
+                if((pp.flags & PF_TYPEMASK) == PF_ENUM)
+                    prh.HintDescriptor |= LADSPA_HINT_TOGGLED;
                 break;
             default: {
                 int defpt = (int)(100 * (pp.def_value - pp.min) / (pp.max - pp.min));

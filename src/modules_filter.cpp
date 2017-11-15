@@ -1176,11 +1176,22 @@ uint32_t vocoder_audio_module::process(uint32_t offset, uint32_t numsamples, uin
     int solo = get_solo();
     numsamples += offset;
     float led[32] = {0};
+
+#ifdef MAX_2_CHANNELS
+    assert(vocoder_metadata::in_count == 2);
+    // two pointers each to the same in buffers
+    float *(ins_lmms[4]) = { ins[0], ins[0], ins[1], ins[1] };
+#else
+    assert(vocoder_metadata::in_count == 4);
+    // for pointers to each in buffer
+    float *(ins_lmms[4]) = { ins[0], ins[1], ins[2], ins[3] };
+#endif
+
     if(bypassed) {
         // everything bypassed
         while(offset < numsamples) {
-            outs[0][offset] = ins[0][offset];
-            outs[1][offset] = ins[1][offset];
+            outs[0][offset] = ins_lmms[0][offset];
+            outs[1][offset] = ins_lmms[1][offset];
             float values[] = {0, 0, 0, 0, 0, 0};
             meters.process(values);
             ++offset;
@@ -1195,12 +1206,12 @@ uint32_t vocoder_audio_module::process(uint32_t offset, uint32_t numsamples, uin
             double pR   = 0;
             
             // carrier with level
-            double cL = ins[0][offset] * *params[param_carrier_in];
-            double cR = ins[1][offset] * *params[param_carrier_in];
-            
+            double cL = ins_lmms[0][offset] * *params[param_carrier_in];
+            double cR = ins_lmms[1][offset] * *params[param_carrier_in];
+
             // modulator with level
-            double mL = ins[2][offset] * *params[param_mod_in];
-            double mR = ins[3][offset] * *params[param_mod_in];
+            double mL = ins_lmms[2][offset] * *params[param_mod_in];
+            double mR = ins_lmms[3][offset] * *params[param_mod_in];
             
             // noise generator
             double nL = (float)rand() / (float)RAND_MAX;
@@ -1303,7 +1314,7 @@ uint32_t vocoder_audio_module::process(uint32_t offset, uint32_t numsamples, uin
             // next sample
             ++offset;
         } // cycle trough samples
-        bypass.crossfade(ins, outs, 2, orig_offset, orig_numsamples);
+        bypass.crossfade(ins_lmms, outs, 2, orig_offset, orig_numsamples);
         // clean up
         for (int i = 0; i < bands; i++) {
             for (int j = 0; j < order; j++) {
