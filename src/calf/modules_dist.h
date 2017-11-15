@@ -29,8 +29,9 @@
 #include "giface.h"
 #include "metadata.h"
 #include "plugin_tools.h"
+#ifdef ENABLE_EXPERIMENTAL
 #include <fluidsynth.h>
-
+#endif
 
 namespace calf_plugins {
 
@@ -113,6 +114,7 @@ public:
  * VINYL by Markus Schmidt
 **********************************************************************/
 
+#ifdef ENABLE_EXPERIMENTAL
 class vinyl_audio_module:
     public audio_module<vinyl_metadata>, public frequency_response_line_graph
 {
@@ -157,6 +159,7 @@ public:
     bool get_graph(int index, int subindex, int phase, float *data, int points, cairo_iface *context, int *mode) const;
     bool get_layers(int index, int generation, unsigned int &layers) const;
 };
+#endif
 
 /**********************************************************************
  * TAPESIMULATOR by Markus Schmidt

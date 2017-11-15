@@ -123,6 +123,7 @@ struct comp_delay_metadata: public plugin_metadata<comp_delay_metadata>
     enum { in_count = 2, out_count = 2, ins_optional = 1, outs_optional = 1, rt_capable = true, support_midi = false, require_midi = false, require_instance_access = false };
     PLUGIN_NAME_ID_LABEL("compdelay", "compdelay", "Compensation Delay Line")
 };
+typedef comp_delay_metadata compdelay_metadata;
 
 struct haas_enhancer_metadata: public plugin_metadata<haas_enhancer_metadata>
 {
@@ -149,6 +150,7 @@ struct reverse_delay_metadata: public plugin_metadata<reverse_delay_metadata>
     enum { in_count = 2, out_count = 2, ins_optional = 0, outs_optional = 0, rt_capable = true, support_midi = false, require_midi = false, require_instance_access = false };
     PLUGIN_NAME_ID_LABEL("reversedelay", "reversedelay", "Reverse Delay")
 };
+typedef reverse_delay_metadata reversedelay_metadata;
 
 struct rotary_speaker_metadata: public plugin_metadata<rotary_speaker_metadata>
 {
@@ -595,7 +597,11 @@ struct xover4_metadata: public plugin_metadata<xover4_metadata>
 /// Markus and Chrischis Vocoder - metadata
 struct vocoder_metadata: public plugin_metadata<vocoder_metadata>
 {
+#ifdef MAX_2_CHANNELS
+    enum { in_count = 2, out_count = 2, ins_optional = 0, outs_optional = 0, support_midi = false, require_midi = false, rt_capable = true, require_instance_access = false };
+#else
     enum { in_count = 4, out_count = 2, ins_optional = 0, outs_optional = 0, support_midi = false, require_midi = false, rt_capable = true, require_instance_access = false };
+#endif
     enum { param_bypass, param_link, param_detectors,
            param_carrier_in, param_carrier_inL, param_carrier_inR, param_carrier_clip_inL, param_carrier_clip_inR,
            param_mod_in, param_mod_inL, param_mod_inR, param_mod_clip_inL, param_mod_clip_inR,

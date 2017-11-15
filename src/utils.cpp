@@ -18,7 +18,11 @@
  * Boston, MA  02110-1301  USA
  */
 #include <config.h>
+#include <stdint.h>
+#include <cstring>
+#ifndef DISABLE_OSC
 #include <calf/osctl.h>
+#endif
 #include <calf/utils.h>
 #include <cstdint>
 #include <cstring>
@@ -26,10 +30,13 @@
 #include <sstream>
 
 using namespace std;
+#ifndef DISABLE_OSC
 using namespace osctl;
+#endif
 
 namespace calf_utils {
 
+#ifndef DISABLE_OSC
 string encode_map(const dictionary &data)
 {
     osctl::string_buffer sb;
@@ -57,6 +64,7 @@ void decode_map(dictionary &data, const string &src)
         data[tmp] = tmp2;
     }
 }
+#endif
 
 std::string xml_escape(const std::string &src)
 {

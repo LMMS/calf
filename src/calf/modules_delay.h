@@ -131,6 +131,7 @@ public:
     void set_sample_rate(uint32_t sr);
     uint32_t process(uint32_t offset, uint32_t numsamples, uint32_t inputs_mask, uint32_t outputs_mask);
 };
+typedef comp_delay_audio_module compdelay_audio_module;
 
 /**********************************************************************
  * HAAS enhancer by Vladimir Sadovnikov 
@@ -193,6 +194,7 @@ public:
     void set_sample_rate(uint32_t sr);
     uint32_t process(uint32_t offset, uint32_t numsamples, uint32_t inputs_mask, uint32_t outputs_mask);
 };
+typedef reverse_delay_audio_module reversedelay_audio_module;
 
 };
 #endif

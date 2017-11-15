@@ -15,15 +15,17 @@
     // Simulator
     PER_MODULE_ITEM(rotary_speaker,      false, "rotaryspeaker")
     PER_MODULE_ITEM(tapesimulator,       false, "tapesimulator")
+#ifdef ENABLE_EXPERIMENTAL
     PER_MODULE_ITEM(vinyl,               false, "vinyl")
+#endif
     
     // Reverb
     PER_MODULE_ITEM(reverb,              false, "reverb")
     
     // Delay
     PER_MODULE_ITEM(vintage_delay,       false, "vintagedelay")
-    PER_MODULE_ITEM(comp_delay,          false, "compdelay")
-    PER_MODULE_ITEM(reverse_delay,       false, "reversedelay")
+    PER_MODULE_ITEM(compdelay,          false, "compdelay")
+    PER_MODULE_ITEM(reversedelay,       false, "reversedelay")
     
     // Compressor
     PER_MODULE_ITEM(compressor,          false, "compressor")
