@@ -22,7 +22,7 @@
 #include <calf/modules_synths.h>
 
 using namespace dsp;
-using namespace calf_plugins;
+using namespace veal_plugins;
 using namespace std;
 
 float silence[4097];

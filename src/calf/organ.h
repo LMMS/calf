@@ -125,7 +125,7 @@ struct organ_parameters {
 /// 2^ORGAN_BIG_WAVE_SHIFT = how many (quasi)periods per sample
 #define ORGAN_BIG_WAVE_SHIFT 5
 
-class organ_voice_base: public calf_plugins::organ_enums
+class organ_voice_base: public veal_plugins::organ_enums
 {
 public:
     typedef waveform_family<ORGAN_WAVE_BITS> small_wave_family;
@@ -166,7 +166,7 @@ public:
     static inline big_wave_family &get_big_wave(int wave) {
         return (*big_waves)[wave];
     }
-    static void precalculate_waves(calf_plugins::progress_report_iface *reporter);
+    static void precalculate_waves(veal_plugins::progress_report_iface *reporter);
     void update_pitch();
     // this doesn't really have a voice interface
     void render_percussion_to(float (*buf)[2], int nsamples);
@@ -284,7 +284,7 @@ public:
     }
 };
 
-struct drawbar_organ: public dsp::basic_synth, public calf_plugins::organ_enums {
+struct drawbar_organ: public dsp::basic_synth, public veal_plugins::organ_enums {
     organ_parameters *parameters;
     percussion_voice percussion;
     scanner_vibrato global_vibrato;
@@ -310,7 +310,7 @@ struct drawbar_organ: public dsp::basic_synth, public calf_plugins::organ_enums 
 
 };
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 struct organ_audio_module: public audio_module<organ_metadata>, public dsp::drawbar_organ, public line_graph_iface
 {

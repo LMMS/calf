@@ -42,7 +42,7 @@ G_BEGIN_DECLS
 struct CalfLineGraph
 {
     GtkDrawingArea parent;
-    const calf_plugins::line_graph_iface *source;
+    const veal_plugins::line_graph_iface *source;
     int source_id;
     bool is_square;
     bool use_fade;
@@ -80,7 +80,7 @@ extern int calf_line_graph_update_if(CalfLineGraph *graph, int generation);
 struct CalfPhaseGraph
 {
     GtkDrawingArea parent;
-    const calf_plugins::phase_graph_iface *source;
+    const veal_plugins::phase_graph_iface *source;
     int source_id;
     cairo_surface_t *cache_surface;
     cairo_surface_t *fade_surface;
@@ -190,7 +190,7 @@ extern void calf_tube_set_value(CalfTube *tube, float value);
 
 G_END_DECLS
 
-class cairo_impl: public calf_plugins::cairo_iface
+class cairo_impl: public veal_plugins::cairo_iface
 {
 public:
     cairo_t *context;

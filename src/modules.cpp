@@ -25,7 +25,7 @@
 #include <calf/modules_dev.h>
 
 using namespace dsp;
-using namespace calf_plugins;
+using namespace veal_plugins;
 
 #define SET_IF_CONNECTED(name) if (params[AM::param_##name] != NULL) *params[AM::param_##name] = name;
 

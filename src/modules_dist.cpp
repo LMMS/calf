@@ -24,7 +24,7 @@
 #include <calf/modules_dist.h>
 
 using namespace dsp;
-using namespace calf_plugins;
+using namespace veal_plugins;
 
 /// Saturator Band by Markus Schmidt
 ///

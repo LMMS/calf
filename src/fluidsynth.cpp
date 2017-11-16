@@ -26,7 +26,7 @@
 #if ENABLE_EXPERIMENTAL
 
 using namespace dsp;
-using namespace calf_plugins;
+using namespace veal_plugins;
 using namespace std;
 
 fluidsynth_audio_module::fluidsynth_audio_module()

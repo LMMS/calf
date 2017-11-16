@@ -25,7 +25,7 @@
 #include <time.h>
 #include <math.h>
 
-using namespace calf_plugins;
+using namespace veal_plugins;
 using namespace dsp;
 
 simple_phaser::simple_phaser(int _max_stages, float *x1vals, float *y1vals)

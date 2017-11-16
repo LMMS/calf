@@ -31,7 +31,7 @@
 #include "metadata.h"
 #include "plugin_tools.h"
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 /// Not a true _audio_module style class, just pretends to be one!
 /// Main gain reduction routine by Thor called by various audio modules

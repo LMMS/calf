@@ -25,7 +25,7 @@
 
 using namespace std;
 using namespace calf_utils;
-using namespace calf_plugins;
+using namespace veal_plugins;
 
 float parameter_properties::from_01(double value01) const
 {
@@ -185,7 +185,7 @@ std::string parameter_properties::to_string(float value) const
     return string(buf);
 }
 
-void calf_plugins::plugin_ctl_iface::clear_preset() {
+void veal_plugins::plugin_ctl_iface::clear_preset() {
     int param_count = get_metadata_iface()->get_param_count();
     for (int i = 0; i < param_count; i++)
     {
@@ -200,7 +200,7 @@ void calf_plugins::plugin_ctl_iface::clear_preset() {
     }
 }
 
-const char *calf_plugins::load_gui_xml(const std::string &plugin_id)
+const char *veal_plugins::load_gui_xml(const std::string &plugin_id)
 {
 #if 0
     try {
@@ -213,7 +213,7 @@ const char *calf_plugins::load_gui_xml(const std::string &plugin_id)
     }
 }
 
-bool calf_plugins::get_freq_gridline(int subindex, float &pos, bool &vertical, std::string &legend, cairo_iface *context, bool use_frequencies, float res, float ofs)
+bool veal_plugins::get_freq_gridline(int subindex, float &pos, bool &vertical, std::string &legend, cairo_iface *context, bool use_frequencies, float res, float ofs)
 {
     if (subindex < 0 )
 	return false;
@@ -261,7 +261,7 @@ bool calf_plugins::get_freq_gridline(int subindex, float &pos, bool &vertical, s
     return true;
 }
 
-void calf_plugins::set_channel_color(cairo_iface *context, int channel)
+void veal_plugins::set_channel_color(cairo_iface *context, int channel)
 {
     if (channel & 1)
         context->set_source_rgba(0.35, 0.4, 0.2, 1);
@@ -287,13 +287,13 @@ int frequency_response_line_graph::get_changed_offsets(int index, int generation
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
-calf_plugins::plugin_registry &calf_plugins::plugin_registry::instance()
+veal_plugins::plugin_registry &veal_plugins::plugin_registry::instance()
 {
-    static calf_plugins::plugin_registry registry;
+    static veal_plugins::plugin_registry registry;
     return registry;
 }
 
-const plugin_metadata_iface *calf_plugins::plugin_registry::get_by_uri(const char *plugin_uri)
+const plugin_metadata_iface *veal_plugins::plugin_registry::get_by_uri(const char *plugin_uri)
 {
     static const char prefix[] = "http://calf.sourceforge.net/plugins/";
     if (strncmp(plugin_uri, prefix, sizeof(prefix) - 1))
@@ -307,7 +307,7 @@ const plugin_metadata_iface *calf_plugins::plugin_registry::get_by_uri(const cha
     return NULL;
 }
 
-const plugin_metadata_iface *calf_plugins::plugin_registry::get_by_id(const char *id, bool case_sensitive)
+const plugin_metadata_iface *veal_plugins::plugin_registry::get_by_id(const char *id, bool case_sensitive)
 {
     typedef int (*comparator)(const char *, const char *);
     comparator comp = case_sensitive ? strcmp : strcasecmp;
@@ -321,7 +321,7 @@ const plugin_metadata_iface *calf_plugins::plugin_registry::get_by_id(const char
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
-bool calf_plugins::parse_table_key(const char *key, const char *prefix, bool &is_rows, int &row, int &column)
+bool veal_plugins::parse_table_key(const char *key, const char *prefix, bool &is_rows, int &row, int &column)
 {
     is_rows = false;
     row = -1;

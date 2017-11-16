@@ -23,7 +23,7 @@
 
 #include <string>
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 struct session_load_iface
 {

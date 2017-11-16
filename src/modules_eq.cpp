@@ -24,7 +24,7 @@
 #include <calf/modules_eq.h>
 
 using namespace dsp;
-using namespace calf_plugins;
+using namespace veal_plugins;
 
 /// Equalizer 12 Band by Markus Schmidt
 ///
@@ -337,7 +337,7 @@ float equalizerNband_audio_module<BaseClass, use_hplp>::freq_gain(int index, dou
     return ret;
 }
 
-template class calf_plugins::equalizerNband_audio_module<equalizer5band_metadata, false>;
-template class calf_plugins::equalizerNband_audio_module<equalizer8band_metadata, true>;
-template class calf_plugins::equalizerNband_audio_module<equalizer12band_metadata, true>;
+template class veal_plugins::equalizerNband_audio_module<equalizer5band_metadata, false>;
+template class veal_plugins::equalizerNband_audio_module<equalizer8band_metadata, true>;
+template class veal_plugins::equalizerNband_audio_module<equalizer12band_metadata, true>;
 

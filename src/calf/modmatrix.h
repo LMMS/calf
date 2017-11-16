@@ -32,7 +32,7 @@ struct modulation_entry
     /// Mapped source
     int src1;
     /// Source mapping mode
-    calf_plugins::mod_matrix_metadata::mapping_mode mapping;
+    veal_plugins::mod_matrix_metadata::mapping_mode mapping;
     /// Unmapped modulating source
     int src2;
     /// Modulation amount
@@ -48,7 +48,7 @@ struct modulation_entry
     void reset() {
         src1 = 0;
         src2 = 0;
-        mapping = calf_plugins::mod_matrix_metadata::map_positive;
+        mapping = veal_plugins::mod_matrix_metadata::map_positive;
         amount = 0.f;
         dest = 0;
     }
@@ -56,7 +56,7 @@ struct modulation_entry
 
 };
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 class mod_matrix_impl
 {
@@ -65,10 +65,10 @@ protected:
     mod_matrix_metadata *metadata;
     unsigned int matrix_rows;
     /// Polynomials for different scaling modes (1, x, x^2)
-    static const float scaling_coeffs[calf_plugins::mod_matrix_metadata::map_type_count][3];
+    static const float scaling_coeffs[veal_plugins::mod_matrix_metadata::map_type_count][3];
 
 public:
-    mod_matrix_impl(dsp::modulation_entry *_matrix, calf_plugins::mod_matrix_metadata *_metadata);
+    mod_matrix_impl(dsp::modulation_entry *_matrix, veal_plugins::mod_matrix_metadata *_metadata);
 
     /// Process modulation matrix, calculate outputs from inputs
     inline void calculate_modmatrix(float *moddest, int moddest_count, float *modsrc)

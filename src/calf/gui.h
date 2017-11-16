@@ -29,7 +29,7 @@
 #include "giface.h"
 #include "gui_config.h"
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 class plugin_gui;
 

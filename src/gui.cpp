@@ -26,7 +26,7 @@
 
 #include <iostream>
 
-using namespace calf_plugins;
+using namespace veal_plugins;
 using namespace std;
 
 /******************************** GUI proper ********************************/

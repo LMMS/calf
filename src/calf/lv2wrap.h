@@ -33,7 +33,7 @@
 #include <calf/lv2_uri_map.h>
 #include <string.h>
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 struct lv2_instance: public plugin_ctl_iface, public progress_report_iface
 {

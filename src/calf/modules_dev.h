@@ -27,7 +27,7 @@
 #include <fluidsynth.h>
 #endif
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 #if ENABLE_EXPERIMENTAL
     

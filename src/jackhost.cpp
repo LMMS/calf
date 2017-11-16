@@ -26,13 +26,13 @@
 
 using namespace std;
 using namespace calf_utils;
-using namespace calf_plugins;
+using namespace veal_plugins;
 
 const char *client_name = "calfhost";
 
 extern "C" audio_module_iface *create_calf_plugin_by_name(const char *effect_name);
 
-jack_host *calf_plugins::create_jack_host(const char *effect_name, const std::string &instance_name, calf_plugins::progress_report_iface *priface)
+jack_host *veal_plugins::create_jack_host(const char *effect_name, const std::string &instance_name, veal_plugins::progress_report_iface *priface)
 {
     audio_module_iface *plugin = create_calf_plugin_by_name(effect_name);
     if (plugin != NULL)
@@ -42,7 +42,7 @@ jack_host *calf_plugins::create_jack_host(const char *effect_name, const std::st
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-jack_host::jack_host(audio_module_iface *_module, const std::string &_name, const std::string &_instance_name, calf_plugins::progress_report_iface *_priface)
+jack_host::jack_host(audio_module_iface *_module, const std::string &_name, const std::string &_instance_name, veal_plugins::progress_report_iface *_priface)
 : module(_module)
 {
     name = _name;
@@ -403,7 +403,7 @@ int main(int argc, char *argv[])
         get_builtin_presets().load_defaults(true);
         get_user_presets().load_defaults(false);
     }
-    catch(calf_plugins::preset_exception &e)
+    catch(veal_plugins::preset_exception &e)
     {
         // XXXKF this exception is already handled by load_defaults, so this is redundant
         fprintf(stderr, "Error while loading presets: %s\n", e.what());

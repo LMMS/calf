@@ -21,7 +21,7 @@
 #include <calf/preset.h>
 #include <calf/preset_gui.h>
 
-using namespace calf_plugins;
+using namespace veal_plugins;
 using namespace std;
 
 // this way of filling presets menu is not that great

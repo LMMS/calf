@@ -27,7 +27,7 @@
 #include "jackhost.h"
 #include "session_mgr.h"
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 class main_window;
 

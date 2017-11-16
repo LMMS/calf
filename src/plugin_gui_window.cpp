@@ -26,7 +26,7 @@
 
 #include <iostream>
 
-using namespace calf_plugins;
+using namespace veal_plugins;
 using namespace std;
 
 /******************************* Actions **************************************************/
@@ -147,7 +147,7 @@ void tips_tricks_action(GtkAction *action, plugin_gui_window *gui_win)
 
 };
 
-void calf_plugins::activate_command(GtkAction *action, activate_command_params *params)
+void veal_plugins::activate_command(GtkAction *action, activate_command_params *params)
 {
     plugin_gui *gui = params->gui;
     gui->plugin->execute(params->function_idx);

@@ -27,7 +27,7 @@
 
 using namespace std;
 using namespace calf_utils;
-using namespace calf_plugins;
+using namespace veal_plugins;
 
 jack_client::jack_client()
 {

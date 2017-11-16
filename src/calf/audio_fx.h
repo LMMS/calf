@@ -28,7 +28,7 @@
 #include "onepole.h"
 #include <complex>
 
-namespace calf_plugins {
+namespace veal_plugins {
     struct cairo_iface;
 };
 
@@ -561,8 +561,8 @@ public:
     void activate();
     void deactivate();
     float get_value_from_phase(float ph, float off) const;
-    bool get_graph(float *data, int points, calf_plugins::cairo_iface *context) const;
-    bool get_dot(float &x, float &y, int &size, calf_plugins::cairo_iface *context) const;
+    bool get_graph(float *data, int points, veal_plugins::cairo_iface *context) const;
+    bool get_dot(float &x, float &y, int &size, veal_plugins::cairo_iface *context) const;
 };
 
 

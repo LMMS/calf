@@ -22,7 +22,7 @@
 #include <calf/gtk_session_env.h>
 #include <calf/gtk_main_win.h>
 
-using namespace calf_plugins;
+using namespace veal_plugins;
 
 void gtk_session_environment::init_gui(int &argc, char **&argv)
 {

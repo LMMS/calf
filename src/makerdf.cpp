@@ -32,7 +32,7 @@
 
 using namespace std;
 using namespace calf_utils;
-using namespace calf_plugins;
+using namespace veal_plugins;
 
 static struct option long_options[] = {
     {"help", 0, 0, 'h'},
@@ -491,8 +491,8 @@ void make_ttl(string path_prefix)
     // Prefixes for the manifest TTL
     string ttl = presets_ttl_head;
     
-    calf_plugins::get_builtin_presets().load_defaults(true);
-    calf_plugins::preset_vector &factory_presets = calf_plugins::get_builtin_presets().presets;
+    veal_plugins::get_builtin_presets().load_defaults(true);
+    veal_plugins::preset_vector &factory_presets = veal_plugins::get_builtin_presets().presets;
 
     ttl += "\n";
     

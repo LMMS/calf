@@ -28,7 +28,7 @@
 #define MONO_VU_METER_PARAMS param_meter_in, param_meter_out, param_clip_in, param_clip_out
 #define STEREO_VU_METER_PARAMS param_meter_inL, param_meter_inR, param_meter_outL, param_meter_outR, param_clip_inL, param_clip_inR, param_clip_outL, param_clip_outR
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 struct flanger_metadata: public plugin_metadata<flanger_metadata>
 {

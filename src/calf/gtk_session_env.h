@@ -21,7 +21,7 @@
 
 #include <calf/gui.h>
 
-namespace calf_plugins
+namespace veal_plugins
 {
 
 class gtk_session_environment: public session_environment_iface

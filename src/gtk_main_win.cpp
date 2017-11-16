@@ -25,7 +25,7 @@
 #include <calf/preset.h>
 #include <calf/gtk_main_win.h>
 
-using namespace calf_plugins;
+using namespace veal_plugins;
 using namespace std;
 
 gtk_main_window::gtk_main_window()

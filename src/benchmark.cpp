@@ -252,9 +252,9 @@ template<class Effect>
 void get_default_effect_params(float params[Effect::param_count], uint32_t &sr);
 
 template<>
-void get_default_effect_params<calf_plugins::reverb_audio_module>(float params[3], uint32_t &sr)
+void get_default_effect_params<veal_plugins::reverb_audio_module>(float params[3], uint32_t &sr)
 {
-    typedef calf_plugins::reverb_audio_module mod;
+    typedef veal_plugins::reverb_audio_module mod;
     params[mod::par_decay] = 4;
     params[mod::par_hfdamp] = 2000;
     params[mod::par_amount] = 2;
@@ -262,9 +262,9 @@ void get_default_effect_params<calf_plugins::reverb_audio_module>(float params[3
 }
 
 template<>
-void get_default_effect_params<calf_plugins::filter_audio_module>(float params[4], uint32_t &sr)
+void get_default_effect_params<veal_plugins::filter_audio_module>(float params[4], uint32_t &sr)
 {
-    typedef calf_plugins::filter_audio_module mod;
+    typedef veal_plugins::filter_audio_module mod;
     params[mod::par_cutoff] = 500;
     params[mod::par_resonance] = 3;
     params[mod::par_mode] = 2;
@@ -273,9 +273,9 @@ void get_default_effect_params<calf_plugins::filter_audio_module>(float params[4
 }
 
 template<>
-void get_default_effect_params<calf_plugins::flanger_audio_module>(float params[5], uint32_t &sr)
+void get_default_effect_params<veal_plugins::flanger_audio_module>(float params[5], uint32_t &sr)
 {
-    typedef calf_plugins::flanger_audio_module mod;
+    typedef veal_plugins::flanger_audio_module mod;
     params[mod::par_delay] = 1;
     params[mod::par_depth] = 2;
     params[mod::par_rate] = 1;
@@ -285,9 +285,9 @@ void get_default_effect_params<calf_plugins::flanger_audio_module>(float params[
 }
 
 template<>
-void get_default_effect_params<calf_plugins::compressor_audio_module>(float params[], uint32_t &sr)
+void get_default_effect_params<veal_plugins::compressor_audio_module>(float params[], uint32_t &sr)
 {
-    typedef calf_plugins::compressor_audio_module mod;
+    typedef veal_plugins::compressor_audio_module mod;
     params[mod::param_threshold] = 10;
     params[mod::param_ratio] = 2;
     params[mod::param_attack] = 0.1;
@@ -301,9 +301,9 @@ void get_default_effect_params<calf_plugins::compressor_audio_module>(float para
 }
 
 template<>
-void get_default_effect_params<calf_plugins::multichorus_audio_module>(float params[], uint32_t &sr)
+void get_default_effect_params<veal_plugins::multichorus_audio_module>(float params[], uint32_t &sr)
 {
-    typedef calf_plugins::multichorus_audio_module mod;
+    typedef veal_plugins::multichorus_audio_module mod;
     params[mod::par_delay] = 10;
     params[mod::par_depth] = 10;
     params[mod::par_rate] = 1;
@@ -360,11 +360,11 @@ public:
 
 void effect_test()
 {
-    dsp::do_simple_benchmark<effect_benchmark<calf_plugins::flanger_audio_module> >(5, 10000);
-    dsp::do_simple_benchmark<effect_benchmark<calf_plugins::reverb_audio_module> >(5, 1000);
-    dsp::do_simple_benchmark<effect_benchmark<calf_plugins::filter_audio_module> >(5, 10000);
-    dsp::do_simple_benchmark<effect_benchmark<calf_plugins::compressor_audio_module> >(5, 10000);
-    dsp::do_simple_benchmark<effect_benchmark<calf_plugins::multichorus_audio_module> >(5, 10000);
+    dsp::do_simple_benchmark<effect_benchmark<veal_plugins::flanger_audio_module> >(5, 10000);
+    dsp::do_simple_benchmark<effect_benchmark<veal_plugins::reverb_audio_module> >(5, 1000);
+    dsp::do_simple_benchmark<effect_benchmark<veal_plugins::filter_audio_module> >(5, 10000);
+    dsp::do_simple_benchmark<effect_benchmark<veal_plugins::compressor_audio_module> >(5, 10000);
+    dsp::do_simple_benchmark<effect_benchmark<veal_plugins::multichorus_audio_module> >(5, 10000);
 }
 
 #else

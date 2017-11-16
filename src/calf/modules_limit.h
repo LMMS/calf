@@ -30,7 +30,7 @@
 #include "metadata.h"
 #include "plugin_tools.h"
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 /// Limiter by Markus Schmidt and Christian Holschuh
 class limiter_audio_module: public audio_module<limiter_metadata>, public line_graph_iface {

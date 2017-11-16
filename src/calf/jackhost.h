@@ -30,7 +30,7 @@
 #include <pthread.h>
 #include <jack/jack.h>
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 class jack_host;
     
@@ -90,7 +90,7 @@ public:
     const plugin_metadata_iface *metadata;
     
 public:
-    jack_host(audio_module_iface *_module, const std::string &_name, const std::string &_instance_name, calf_plugins::progress_report_iface *_priface);
+    jack_host(audio_module_iface *_module, const std::string &_name, const std::string &_instance_name, veal_plugins::progress_report_iface *_priface);
     void create(jack_client *_client);    
     void create_ports();
     void init_module();
@@ -137,7 +137,7 @@ public:
     virtual const phase_graph_iface *get_phase_graph_iface() const { return module->get_phase_graph_iface(); }
 };
 
-extern jack_host *create_jack_host(const char *name, const std::string &instance_name, calf_plugins::progress_report_iface *priface);
+extern jack_host *create_jack_host(const char *name, const std::string &instance_name, veal_plugins::progress_report_iface *priface);
 
 };
 

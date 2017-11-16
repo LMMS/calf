@@ -30,7 +30,7 @@
 #include "metadata.h"
 #include "loudness.h"
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 struct ladspa_plugin_info;
 
