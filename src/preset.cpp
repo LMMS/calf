@@ -28,18 +28,18 @@
 #include <sys/stat.h>
 
 using namespace std;
-using namespace calf_plugins;
+using namespace veal_plugins;
 using namespace calf_utils;
 
-extern calf_plugins::preset_list &calf_plugins::get_builtin_presets()
+extern veal_plugins::preset_list &veal_plugins::get_builtin_presets()
 {
-    static calf_plugins::preset_list plist;
+    static veal_plugins::preset_list plist;
     return plist;
 }
 
-extern calf_plugins::preset_list &calf_plugins::get_user_presets()
+extern veal_plugins::preset_list &veal_plugins::get_user_presets()
 {
-    static calf_plugins::preset_list plist;
+    static veal_plugins::preset_list plist;
     return plist;
 }
 
@@ -132,7 +132,7 @@ void plugin_preset::get_from(plugin_ctl_iface *plugin)
     plugin->send_configures(&tmp);
 }
     
-string calf_plugins::preset_list::get_preset_filename(bool builtin)
+string veal_plugins::preset_list::get_preset_filename(bool builtin)
 {
     if (builtin)
     {

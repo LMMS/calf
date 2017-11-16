@@ -24,7 +24,7 @@
 #include "gui.h"
 #include "gui_config.h"
 
-namespace calf_plugins {
+namespace veal_plugins {
 
     class gtk_main_window: public main_window_iface, public gui_environment, public calf_utils::config_listener_iface
     {

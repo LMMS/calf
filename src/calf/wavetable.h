@@ -11,7 +11,7 @@
 #include "envelope.h"
 #include "modmatrix.h"
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 #define WAVETABLE_WAVE_BITS 8
 

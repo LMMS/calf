@@ -23,7 +23,7 @@
 #include <calf/giface.h>
 #include <calf/gui.h>
 
-namespace calf_plugins {
+namespace veal_plugins {
     
 struct gui_preset_access: public preset_access_iface
 {

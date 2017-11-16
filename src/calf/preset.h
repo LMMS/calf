@@ -25,7 +25,7 @@
 #include <string.h>
 #include "utils.h"
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 class plugin_ctl_iface;
     

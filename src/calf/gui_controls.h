@@ -26,7 +26,7 @@ struct CalfCurve;
 struct CalfKeyboard;
 struct CalfLed;
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 // containers
@@ -288,7 +288,7 @@ struct listview_param_control: public param_control, public send_configure_iface
 {
     GtkTreeView *tree;
     GtkListStore *lstore;
-    const calf_plugins::table_metadata_iface *tmif;
+    const veal_plugins::table_metadata_iface *tmif;
     int cols;
     std::vector<GtkTreeIter> positions;
     

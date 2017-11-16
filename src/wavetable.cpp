@@ -28,7 +28,7 @@
 #include <iostream>
 
 using namespace dsp;
-using namespace calf_plugins;
+using namespace veal_plugins;
 
 wavetable_voice::wavetable_voice()
 {

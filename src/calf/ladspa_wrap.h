@@ -31,7 +31,7 @@
 #include "giface.h"
 #include "preset.h"
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 struct ladspa_plugin_metadata_set;
 /// A template implementing plugin_ctl_iface for a given plugin

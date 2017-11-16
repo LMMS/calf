@@ -26,7 +26,7 @@
 #include "giface.h"
 #include "vumeter.h"
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 template<class Meter>
 struct in_out_metering_base

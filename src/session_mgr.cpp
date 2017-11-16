@@ -30,7 +30,7 @@
 #include <string.h>
 
 using namespace std;
-using namespace calf_plugins;
+using namespace veal_plugins;
 
 
 class lash_session_manager_base: public session_manager_iface
@@ -203,7 +203,7 @@ void old_lash_session_manager::poll()
     } while(1);
 }
 
-session_manager_iface *calf_plugins::create_lash_session_mgr(session_client_iface *client, int &argc, char **&argv)
+session_manager_iface *veal_plugins::create_lash_session_mgr(session_client_iface *client, int &argc, char **&argv)
 {
     return new old_lash_session_manager(client, argc, argv);
 }
@@ -292,7 +292,7 @@ bool new_lash_session_manager::quit_cb(void *user_data)
     return true;
 }
 
-session_manager_iface *calf_plugins::create_lash_session_mgr(session_client_iface *_client, int &, char **&)
+session_manager_iface *veal_plugins::create_lash_session_mgr(session_client_iface *_client, int &, char **&)
 {
     return new new_lash_session_manager(client);
 }

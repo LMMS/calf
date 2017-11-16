@@ -30,7 +30,7 @@
 #include "metadata.h"
 #include "plugin_tools.h"
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 /// Equalizer N Band by Markus Schmidt (based on Krzysztof's filters)
 template<class BaseClass, bool has_lphp>

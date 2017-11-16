@@ -31,7 +31,7 @@
 #include <calf/modules_synths.h>
 #include <calf/organ.h>
 
-using namespace calf_plugins;
+using namespace veal_plugins;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -483,9 +483,9 @@ ladspa_plugin_metadata_set::~ladspa_plugin_metadata_set()
 
 #if USE_LV2
 // instantiate descriptor templates
-template<class Module> LV2_Descriptor calf_plugins::lv2_wrapper<Module>::descriptor;
-template<class Module> LV2_Calf_Descriptor calf_plugins::lv2_wrapper<Module>::calf_descriptor;
-template<class Module> LV2_State_Interface calf_plugins::lv2_wrapper<Module>::state_iface;
+template<class Module> LV2_Descriptor veal_plugins::lv2_wrapper<Module>::descriptor;
+template<class Module> LV2_Calf_Descriptor veal_plugins::lv2_wrapper<Module>::calf_descriptor;
+template<class Module> LV2_State_Interface veal_plugins::lv2_wrapper<Module>::state_iface;
 
 extern "C" {
 
@@ -517,7 +517,7 @@ extern "C" {
 
 const DSSI_Descriptor *dssi_descriptor(unsigned long Index)
 {
-    #define PER_MODULE_ITEM(name, isSynth, jackname) if (!(Index--)) return &calf_plugins::ladspa_wrapper<name##_audio_module>::get().dssi_descriptor;
+    #define PER_MODULE_ITEM(name, isSynth, jackname) if (!(Index--)) return &veal_plugins::ladspa_wrapper<name##_audio_module>::get().dssi_descriptor;
     #include <calf/modulelist.h>
     return NULL;
 }

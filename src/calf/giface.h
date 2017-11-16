@@ -32,7 +32,7 @@ namespace osctl {
     struct osc_client;
 }
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 enum {
     MAX_SAMPLE_RUN = 256
@@ -565,12 +565,12 @@ struct dssi_feedback_sender
     /// Indices of graphs to send
     std::vector<int> indices;
     /// Source for the graph data (interface to marshal)
-    const calf_plugins::line_graph_iface *graph;
+    const veal_plugins::line_graph_iface *graph;
     
     /// Create using a new client
     dssi_feedback_sender(const char *URI, const line_graph_iface *_graph);
     dssi_feedback_sender(osctl::osc_client *_client, const line_graph_iface *_graph);
-    void add_graphs(const calf_plugins::parameter_properties *props, int num_params);
+    void add_graphs(const veal_plugins::parameter_properties *props, int num_params);
     void update();
     ~dssi_feedback_sender();
 };
@@ -601,7 +601,7 @@ public:
     bool requires_midi() const { return Metadata::require_midi; }
     bool is_rt_capable() const { return Metadata::rt_capable; }
     int get_param_port_offset()  const { return Metadata::in_count + Metadata::out_count; }
-    const char *get_gui_xml() const { static const char *data_ptr = calf_plugins::load_gui_xml(get_id()); return data_ptr; }
+    const char *get_gui_xml() const { static const char *data_ptr = veal_plugins::load_gui_xml(get_id()); return data_ptr; }
     plugin_command_info *get_commands() const { return NULL; }
     const parameter_properties *get_param_props(int param_no) const { return &param_props[param_no]; }
     const char **get_port_names() const { return port_names; }
@@ -613,7 +613,7 @@ public:
 
 #define CALF_PORT_NAMES(name) template<> const char *::plugin_metadata<name##_metadata>::port_names[]
 #define CALF_PORT_PROPS(name) template<> parameter_properties plugin_metadata<name##_metadata>::param_props[name##_metadata::param_count + 1]
-#define CALF_PLUGIN_INFO(name) template<> calf_plugins::ladspa_plugin_info plugin_metadata<name##_metadata>::plugin_info
+#define CALF_PLUGIN_INFO(name) template<> veal_plugins::ladspa_plugin_info plugin_metadata<name##_metadata>::plugin_info
 #define PLUGIN_NAME_ID_LABEL(name, id, label) \
     static const char *impl_get_name() { return name; } \
     static const char *impl_get_id() { return id; } \

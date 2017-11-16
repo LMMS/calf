@@ -32,7 +32,7 @@
 #include <glib.h>
 
 using namespace std;
-using namespace calf_plugins;
+using namespace veal_plugins;
 using namespace calf_utils;
 
 struct LV2_Calf_Descriptor {

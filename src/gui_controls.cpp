@@ -31,7 +31,7 @@
 #include <calf/utils.h>
 #include <gdk/gdk.h>
 
-using namespace calf_plugins;
+using namespace veal_plugins;
 using namespace calf_utils;
 using namespace std;
 

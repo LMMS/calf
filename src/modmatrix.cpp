@@ -25,7 +25,7 @@
 
 using namespace std;
 using namespace dsp;
-using namespace calf_plugins;
+using namespace veal_plugins;
 using namespace calf_utils;
 
 mod_matrix_impl::mod_matrix_impl(dsp::modulation_entry *_matrix, mod_matrix_metadata *_metadata)

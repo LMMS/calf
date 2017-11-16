@@ -31,7 +31,7 @@
 #include "modmatrix.h"
 #include "metadata.h"
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 #define MONOSYNTH_WAVE_BITS 12
     

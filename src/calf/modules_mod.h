@@ -30,7 +30,7 @@
 #include "metadata.h"
 #include "multichorus.h"
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 class flanger_audio_module: public audio_module<flanger_metadata>, public frequency_response_line_graph
 {

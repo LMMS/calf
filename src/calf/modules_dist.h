@@ -30,7 +30,7 @@
 #include "metadata.h"
 #include "plugin_tools.h"
 
-namespace calf_plugins {
+namespace veal_plugins {
 
 /// Saturator by Markus Schmidt (based on Krzysztof's filters and Tom's distortion algorythm)
 class saturator_audio_module: public audio_module<saturator_metadata> {
