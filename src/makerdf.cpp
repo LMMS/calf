@@ -265,8 +265,8 @@ void make_ttl(string path_prefix, const string *data_dir)
         "        uiext:showInterface ;\n"
         "    lv2:requiredFeature uiext:makeResident ;\n"
         "    lv2:optionalFeature <http://lv2plug.in/ns/ext/data-access> ;\n"
-        "    lv2:optionalFeature <" LV2_OPTIONS_URI "> ;\n"
-        "    lv2:optionalFeature <" LV2_ATOM_URI "> ;\n"
+        //"    lv2:optionalFeature <" LV2_OPTIONS_URI "> ;\n"
+        //"    lv2:optionalFeature <" LV2_ATOM_URI "> ;\n"
         "    uiext:binary <calflv2gui.so> .\n"
         "\n" + gtkgui_uri_req + "\n"
         "    a uiext:GtkUI ;\n"
@@ -275,8 +275,8 @@ void make_ttl(string path_prefix, const string *data_dir)
         "    lv2:requiredFeature uiext:makeResident ;\n"
         "    lv2:requiredFeature <http://lv2plug.in/ns/ext/instance-access> ;\n"
         "    lv2:requiredFeature <http://lv2plug.in/ns/ext/data-access> ;\n"
-        "    lv2:optionalFeature <" LV2_OPTIONS_URI "> ;\n"
-        "    lv2:optionalFeature <" LV2_ATOM_URI "> ;\n"
+        //"    lv2:optionalFeature <" LV2_OPTIONS_URI "> ;\n"
+        //"    lv2:optionalFeature <" LV2_ATOM_URI "> ;\n"
         "    uiext:binary <calflv2gui.so> .\n"
     ;
 #endif
@@ -338,6 +338,7 @@ void make_ttl(string path_prefix, const string *data_dir)
             
         ttl += "    doap:name \"" + string(lpi.name) + "\" ;\n";
         ttl += "    doap:license <http://usefulinc.com/doap/licenses/lgpl> ;\n";
+        ttl += "    doap:developer <http://calf.sourceforge.net/team> ;\n";
         ttl += "    doap:maintainer <http://calf.sourceforge.net/team> ;\n";
 
 #if USE_LV2_GUI
@@ -668,7 +669,7 @@ int main(int argc, char *argv[])
                     fprintf(stderr, "calfmakerdf: Data directory must not be empty\n");
                     exit(1);
                 }
-                if (pkglibdir_path[path_prefix.length() - 1] != '/')
+                if (pkglibdir_path[pkglibdir_path.length() - 1] != '/')
                     pkglibdir_path += '/';
                 break;
 #endif

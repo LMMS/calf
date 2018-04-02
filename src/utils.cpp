@@ -24,7 +24,7 @@
 #include <calf/osctl.h>
 #endif
 #include <calf/utils.h>
-#include <cstdint>
+#include <stdint.h>
 #include <cstring>
 #include <cstdio>
 #include <sstream>
