@@ -219,7 +219,7 @@ uint32_t stereo_audio_module::process(uint32_t offset, uint32_t numsamples, uint
             meter_outR = R;
             
             // phase meter
-            if(fabs(L) > 0.001 and fabs(R) > 0.001) {
+            if(fabs(L) > 0.001 && fabs(R) > 0.001) {
                 meter_phase = fabs(fabs(L+R) > 0.000000001 ? sin(fabs((L-R)/(L+R))) : 0.f);
             } else {
                 meter_phase = 0.f;
