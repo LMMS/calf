@@ -70,7 +70,7 @@ void limiter_audio_module::params_changed()
         attack_old = *params[param_attack];
         limiter.reset();
     }
-    if(*params[param_limit] != limit_old or *params[param_asc] != asc_old) {
+    if(*params[param_limit] != limit_old || *params[param_asc] != asc_old) {
         asc_old = *params[param_asc];
         limit_old = *params[param_limit];
         limiter.reset_asc();
@@ -271,7 +271,7 @@ void multibandlimiter_audio_module::params_changed()
     }
     
     // rebuild multiband buffer
-    if( *params[param_attack] != attack_old or *params[param_oversampling] != oversampling_old) {
+    if( *params[param_attack] != attack_old || *params[param_oversampling] != oversampling_old) {
         int bs           = (int)(srate * (*params[param_attack] / 1000.f) * channels * over);
         buffer_size      = bs - bs % channels; // buffer size attack rate
         attack_old       = *params[param_attack];
@@ -283,7 +283,7 @@ void multibandlimiter_audio_module::params_changed()
         }
         broadband.reset();
     }
-    if(*params[param_limit] != limit_old or *params[param_asc] != asc_old or *params[param_weight0] != weight_old[0] or *params[param_weight1] != weight_old[1] or *params[param_weight2] != weight_old[2] or *params[param_weight3] != weight_old[3] ) {
+    if(*params[param_limit] != limit_old || *params[param_asc] != asc_old || *params[param_weight0] != weight_old[0] || *params[param_weight1] != weight_old[1] || *params[param_weight2] != weight_old[2] || *params[param_weight3] != weight_old[3] ) {
         asc_old    = *params[param_asc];
         limit_old  = *params[param_limit];
         for (int j = 0; j < strips; j ++) {
@@ -667,7 +667,7 @@ void sidechainlimiter_audio_module::params_changed()
     }
     
     // rebuild multiband buffer
-    if( *params[param_attack] != attack_old or *params[param_oversampling] != oversampling_old) {
+    if( *params[param_attack] != attack_old || *params[param_oversampling] != oversampling_old) {
         int bs           = (int)(srate * (*params[param_attack] / 1000.f) * channels * over);
         buffer_size      = bs - bs % channels; // buffer size attack rate
         attack_old       = *params[param_attack];
@@ -679,7 +679,7 @@ void sidechainlimiter_audio_module::params_changed()
         }
         broadband.reset();
     }
-    if(*params[param_limit] != limit_old or *params[param_asc] != asc_old or *params[param_weight0] != weight_old[0] or *params[param_weight1] != weight_old[1] or *params[param_weight2] != weight_old[2] or *params[param_weight3] != weight_old[3] ) {
+    if(*params[param_limit] != limit_old || *params[param_asc] != asc_old || *params[param_weight0] != weight_old[0] || *params[param_weight1] != weight_old[1] || *params[param_weight2] != weight_old[2] || *params[param_weight3] != weight_old[3] ) {
         asc_old    = *params[param_asc];
         limit_old  = *params[param_limit];
         for (int j = 0; j < strips; j ++) {
