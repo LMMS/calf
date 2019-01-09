@@ -23,6 +23,7 @@
 #include <calf/giface.h>
 #include <calf/audio_fx.h>
 #include <calf/modules_limit.h>
+#include <calf/utils.h>
 
 using namespace dsp;
 using namespace calf_plugins;
@@ -128,7 +129,7 @@ uint32_t limiter_audio_module::process(uint32_t offset, uint32_t numsamples, uin
             float tmpR;
             
             // process gain reduction
-            float fickdich[0];
+            STACKALLOC(float, fickdich, limiter.overall_buffer_size);
             for (int i = 0; i < *params[param_oversampling]; i ++) {
                 tmpL = samplesL[i];
                 tmpR = samplesR[i];
@@ -456,7 +457,7 @@ uint32_t multibandlimiter_audio_module::process(uint32_t offset, uint32_t numsam
                 }
                 
                 // process broadband limiter
-                float fickdich[0];
+                STACKALLOC(float, fickdich, broadband.overall_buffer_size);
                 tmpL = resL[o];
                 tmpR = resR[o];
                 broadband.process(tmpL, tmpR, fickdich);
@@ -839,7 +840,7 @@ uint32_t sidechainlimiter_audio_module::process(uint32_t offset, uint32_t numsam
                 }
                 
                 // process broadband limiter
-                float fickdich[0];
+                STACKALLOC(float, fickdich, broadband.overall_buffer_size);
                 tmpL = resL[o];
                 tmpR = resR[o];
                 broadband.process(tmpL, tmpR, fickdich);
