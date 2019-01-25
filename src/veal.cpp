@@ -528,7 +528,7 @@ const LV2_Descriptor *lv2_descriptor(uint32_t index)
 
 #if USE_LADSPA
 extern "C" {
-
+LADSPA_MODULE
 const LADSPA_Descriptor *ladspa_descriptor(unsigned long Index)
 {
     #define PER_MODULE_ITEM(name, isSynth, jackname) if (!isSynth && !(Index--)) return &ladspa_wrapper<name##_audio_module>::get().descriptor;
