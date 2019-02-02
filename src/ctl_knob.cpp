@@ -23,9 +23,6 @@
 #include <calf/drawingutils.h>
 #include <gdk/gdkkeysyms.h>
 #include <cairo/cairo.h>
-#if !defined(__APPLE__)
-#include <malloc.h>
-#endif
 #include <math.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -216,7 +213,7 @@ calf_knob_expose (GtkWidget *widget, GdkEventExpose *event)
     }
     while (deg <= end) {
         if (self->debug) printf("tick %d deg %.2f last %.2f end %.2f\n", tick, deg, last, end);
-        if (self->ticks.size() and deg == start + range01(self->ticks[tick]) * base) {
+        if (self->ticks.size() and tick < self->ticks.size() and deg == start + range01(self->ticks[tick]) * base) {
             // seems we want to draw a tick on this angle.
             // so we have to fill the void between the last set angle
             // and the point directly before the tick first.
