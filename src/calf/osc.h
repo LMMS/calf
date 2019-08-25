@@ -260,7 +260,7 @@ struct waveform_oscillator: public simple_oscillator
         uint32_t wpos = phase >> (32 - SIZE_BITS);
         return dsp::lerp(waveform[wpos], waveform[(wpos + 1) & MASK], (phase & (SCALE - 1)) * (1.0f / SCALE));
     }
-    /// Add/substract two phase-shifted values
+    /// Add/subtract two phase-shifted values
     inline float get_phaseshifted(uint32_t shift, float mix)
     {
         uint32_t wpos = phase >> (32 - SIZE_BITS);
