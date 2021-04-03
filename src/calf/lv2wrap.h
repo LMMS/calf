@@ -25,7 +25,7 @@
 
 #include <string>
 #include <vector>
-#include <lv2.h>
+#include "lv2/lv2plug.in/ns/lv2core/lv2.h"
 #include <calf/giface.h>
 #include <calf/lv2_atom.h>
 #include <calf/lv2_atom_util.h>
@@ -256,8 +256,8 @@ struct lv2_wrapper
     }
     
     static lv2_wrapper &get() { 
-        static lv2_wrapper *instance = new lv2_wrapper;
-        return *instance;
+        static lv2_wrapper instance;
+        return instance;
     }
 };
 

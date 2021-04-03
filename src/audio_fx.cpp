@@ -139,9 +139,12 @@ void biquad_filter_module::calculate_filter(float freq, float q, int mode, float
     } else if ( mode_6db_bp <= mode && mode <= mode_18db_bp ) {
         order = mode - mode_6db_bp + 1;
         left[0].set_bp_rbj(freq, pow(q, 1.0 / order), srate, gain);
-    } else { // mode_6db_br <= mode <= mode_18db_br
+    } else if ( mode_6db_br <= mode && mode <= mode_18db_br) {
         order = mode - mode_6db_br + 1;
         left[0].set_br_rbj(freq, order * 0.1 * q, srate, gain);
+    } else { // mode_allpass
+        order = 3;
+        left[0].set_allpass(freq, 1, srate);
     }
 
     right[0].copy_coeffs(left[0]);
@@ -643,6 +646,11 @@ float lookahead_limiter::get_attenuation()
 void lookahead_limiter::set_sample_rate(uint32_t sr)
 {
     srate = sr;
+    
+    free(buffer);
+    free(nextpos);
+    free(nextdelta);
+    
     // rebuild buffer
     overall_buffer_size = (int)(srate * (100.f / 1000.f) * channels) + channels; // buffer size attack rate multiplied by 2 channels
     buffer = (float*) calloc(overall_buffer_size, sizeof(float));
@@ -1353,7 +1361,7 @@ resampleN::~resampleN()
 }
 void resampleN::set_params(uint32_t sr, int fctr = 2, int fltrs = 2)
 {
-    srate   = sr;
+    srate   = std::max(2u, sr);
     factor  = std::min(16, std::max(1, fctr));
     filters = std::min(4, std::max(1, fltrs));
     // set all filters

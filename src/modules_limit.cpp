@@ -60,9 +60,11 @@ void limiter_audio_module::deactivate()
 }
 void limiter_audio_module::set_srates()
 {
-    resampler[0].set_params(srate, *params[param_oversampling], 2);
-    resampler[1].set_params(srate, *params[param_oversampling], 2);
-    limiter.set_sample_rate(srate * *params[param_oversampling]);
+    if (params[param_oversampling]) {
+        resampler[0].set_params(srate, *params[param_oversampling], 2);
+        resampler[1].set_params(srate, *params[param_oversampling], 2);
+        limiter.set_sample_rate(srate * *params[param_oversampling]);
+    }
 }
 void limiter_audio_module::params_changed()
 {
@@ -150,8 +152,10 @@ uint32_t limiter_audio_module::process(uint32_t offset, uint32_t numsamples, uin
             outR = std::min(std::max(outR, -*params[param_limit]), *params[param_limit]);
 
             // autolevel
-            outL /= *params[param_limit];
-            outR /= *params[param_limit];
+            if (*params[param_auto_level]) {
+                outL /= *params[param_limit];
+                outR /= *params[param_limit];
+            }
 
             // out level
             outL *= *params[param_level_out];
@@ -483,8 +487,10 @@ uint32_t multibandlimiter_audio_module::process(uint32_t offset, uint32_t numsam
             }
             
             // autolevel
-            outL /= *params[param_limit];
-            outR /= *params[param_limit];
+            if (*params[param_auto_level]) {
+                outL /= *params[param_limit];
+                outR /= *params[param_limit];
+            }
 
             // out level
             outL *= *params[param_level_out];
@@ -866,8 +872,10 @@ uint32_t sidechainlimiter_audio_module::process(uint32_t offset, uint32_t numsam
             }
             
             // autolevel
-            outL /= *params[param_limit];
-            outR /= *params[param_limit];
+            if (*params[param_auto_level]) {
+                outL /= *params[param_limit];
+                outR /= *params[param_limit];
+            }
 
             // out level
             outL *= *params[param_level_out];

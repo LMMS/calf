@@ -357,6 +357,7 @@ struct limiter_metadata: public plugin_metadata<limiter_metadata>
            param_att,
            param_asc, param_asc_led, param_asc_coeff,
            param_oversampling,
+           param_auto_level,
            param_count };
     PLUGIN_NAME_ID_LABEL("limiter", "limiter", "Limiter")
 };
@@ -377,6 +378,7 @@ struct multibandlimiter_metadata: public plugin_metadata<multibandlimiter_metada
            param_effrelease0, param_effrelease1, param_effrelease2, param_effrelease3,
            param_asc, param_asc_led, param_asc_coeff,
            param_oversampling,
+           param_auto_level,
            param_count };
     PLUGIN_NAME_ID_LABEL("multibandlimiter", "multibandlimiter", "Multiband Limiter")
 };
@@ -398,6 +400,7 @@ struct sidechainlimiter_metadata: public plugin_metadata<sidechainlimiter_metada
            param_effrelease0, param_effrelease1, param_effrelease2, param_effrelease3, param_effrelease_sc,
            param_asc, param_asc_led, param_asc_coeff,
            param_oversampling, param_level_sc,
+           param_auto_level,
            param_count };
     PLUGIN_NAME_ID_LABEL("sidechainlimiter", "sidechainlimiter", "Sidechain Limiter")
 };

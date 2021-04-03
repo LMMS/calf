@@ -79,6 +79,8 @@ public:
     std::vector<jack_host *> plugins;
     main_window_iface *main_win;
     std::set<std::string> instances;
+    bool has_gui;
+    bool has_trayicon;
     plugin_gui_window *gui_win;
     session_environment_iface *session_env;
     
