@@ -35,6 +35,11 @@ using namespace calf_plugins;
 #define sinc(x) (x == 0) ? 1 : sin(M_PI * x)/(M_PI * x);
 #define RGBAtoINT(r, g, b, a) ((uint32_t)(r * 255) << 24) + ((uint32_t)(g * 255) << 16) + ((uint32_t)(b * 255) << 8) + (uint32_t)(a * 255)
 
+#ifndef M_PI 
+#define M_PI 3.14159265358979323846264338327 
+#endif 
+
+
 analyzer::analyzer() {
     _accuracy       = -1;
     _acc            = -1;
