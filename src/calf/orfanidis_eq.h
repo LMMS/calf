@@ -4,8 +4,6 @@
 #include <math.h>
 #include <vector>
 
-using namespace std;
-
 namespace orfanidis_eq {
 
 //Eq data types.

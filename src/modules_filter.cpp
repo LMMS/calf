@@ -498,7 +498,7 @@ float equalizerNband_audio_module<BaseClass, has_lphp>::freq_gain(int index, dou
 }
 
 template<class BaseClass, bool has_lphp>
-inline string equalizerNband_audio_module<BaseClass, has_lphp>::get_crosshair_label(int x, int y, int sx, int sy, float q, int dB, int name, int note, int cents) const
+inline std::string equalizerNband_audio_module<BaseClass, has_lphp>::get_crosshair_label(int x, int y, int sx, int sy, float q, int dB, int name, int note, int cents) const
 { 
     return frequency_crosshair_label(x, y, sx, sy, q, dB, name, note, cents, 128 * *params[AM::param_zoom], 0);
 }
